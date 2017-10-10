@@ -1,0 +1,137 @@
+\author{Ethan Grant uni: erg2145}
+\title{HW01 STAT W4400}
+\date{\today}
+
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+	\maketitle
+	
+	\begin{enumerate}
+		
+		\item 
+		
+		\begin{enumerate}
+			
+			\item 
+			\begin{align*}
+			y_{new} = f(x_{new}) = arg maxP(x|y)p(y) = p(x|y)P(y)
+			\end{align*}
+			Naive Bayes Assumes independence of all characteristics thus: 
+			
+			\begin{align*}
+			P(x|\mu)= \Pi_{j=1}^{5}p(x^{j},\mu_{k})P(C_{k})
+			\end{align*}
+			By subbing in we get:
+			
+			\begin{align*}
+			f(x_{new})=arg max_{k \epsilon {1,2,3}} p(x^{j},\mu)P(C) \\
+			arg max_{k \epsilon {1,2,3}} \Pi_{j=1}^{5}g(x^{j}|u_{k}^{j},1)P(y=k)
+			\end{align*}
+			
+			\item	You estimate the parameters using maximum likelihood for each dimension separately. \newline
+			
+			Class conditional distribution parameter that must be estimated is $\mu_{k}^{j}$ where k is the class and j is the dimension. WE know from lecture that the MLE for $\mu$ is the average for all values of a class at a given dimension. Thus: \newline
+			\begin{align*}
+			\hat{u_{k}^{j}}=\frac{1}{|C_{k}|}*\sigma{x_{i}^{j}}
+			\end{align*}
+			
+
+			The class prior is estimated based on frequency using MLE where n is the total number of observations \newline
+			\begin{align*}
+			\hat{P(y=k)}=\frac{|C_{j}}{n}
+			\end{align*}
+			
+
+			
+			\item I do expect the naive Bayes classifier to preform well because one of the weakness of the naive bayes is the assumption regarding Independence of each dimension of a given point. There is Independence of dimensions with spherical Gaussian.  
+			
+		\end{enumerate}
+		
+		\item
+		
+			\begin{enumerate}
+				\item Cookbook for MLE
+					
+					\begin{enumerate}
+						\item ensure that the data is i.i.d
+						\item Take the log of the formula to turn it into a sum as opposed to multiplication. You can take the log in this case without changing the function b/c the max doesn't change b/c log is monotonically increasing on $R_{+}$
+						\item take the derivative with respect to the variable that you want to find the estimator for
+						\item set the derivative equal to zero and solve for the estimator
+						\item check that the second derivative is less than zero to ensure the point found is a maximum
+					\end{enumerate}
+				
+				\item
+					
+					\begin{align*}
+						\sum \nabla_{\mu}(ln(\frac{v}{\mu})) + ln(x^{v-1})-ln(\Theta(v))+ln(e^{\frac{-vx}{\mu}})) \\
+						= \sum \nabla_{\mu}(ln(\frac{v}{\mu})) + \nabla_{\mu}(ln(x^{v-1}))-\nabla_{\mu}(ln(\Theta(v)))+\nabla_{\mu}(\frac{-vx}{\mu}) \\	
+						 = \sum v*(\frac{1}{\frac{v}{\mu}})*\frac{-v}{\mu^{2}}+\frac{-vx}{\mu^{2}} \\
+						0 =  \sum \frac{-v}{\hat{\mu}}+\frac{v*x_{i}}{\hat{\mu^{2}}} \\
+						= \sum \frac{-v}{\hat{\mu}}+ \sum \frac{v*x_{i}}{\hat{\mu^{2}}} \\
+						= \frac{-n*v}{\mu}+\sum\frac{v*x_{i}}{\mu^{2}} \\
+						\frac{n*v}{\mu} = \sum\frac{v*x_{i}}{\mu^{2}} \\
+						n*v = \frac{v}{\hat{\mu}}*\sum x_{i} \\
+						\hat{\mu} = \frac{\sum x_{i}}{n} = \frac{1}{n}* \sum x_{i}
+					\end{align*}
+					Now we must check the second derivative to ensure this is a max
+					\begin{align*}
+					\sum \frac{v}{\mu^{2}}-\frac{2*v*x*\mu}{\mu^{2}*\mu^{2}} \\
+					= \sum \frac{v}{\mu^{2}}-\frac{2*v*x}{\mu^{3}} \\
+					0 = \frac{n*v}{\hat{\mu^{2}}} - \frac{2*v}{\hat{\mu^{3}}}*\sum x_{i} \\
+					= \frac{n*v}{\bar{x^{2}}}-\frac{2*v*n}{\bar{x^{2}}} \\
+					= -\frac{n*v}{\bar{x^{2}}}
+					\end{align*}
+					since n and v are both positive this result is negative confirming that this is a max
+					
+				\item
+				
+				\begin{align*}
+				 0 = \sum [\nabla_{v}(ln(\frac{v}{\mu}) + ln(x^{v-1}) - ln(\tau(v)+ln(e^{\frac{-v*x}{\mu}}))] \\
+				 =  \sum \nabla_{v}(ln(\frac{v}{\mu})) + \nabla_{v}(ln(x^{v-1})) - \nabla_{v}(ln(\tau(v)))+\nabla_{v}(\frac{-v*x}{\mu}) \\
+				 = \sum ln(\frac{v}{\mu}) + \frac{1}{\frac{v}{\mu}}*\frac{1}{\mu}*v +\nabla_{v}((v-1)*ln(x_{i}))-\phi-\frac{x_{i}}{\mu} \\
+				 = \sum ln(\frac{\hat{v}}{\mu})-(\frac{x_{i}}{\mu})-1)-\phi(\hat{v})+ln(x_{i}) \\
+				 = \sum ln(\frac{x_{i}*\hat{v}}{\mu})-(\frac{x_{i}}{\mu}-1)-\phi(\hat{v})
+				\end{align*}
+				
+			\end{enumerate}
+			
+		\item
+			By the definition of the classifier : $f_{0}(x) = arg max P(y|x)$
+			Pr(error) = risk under zero-one loss by definition \newline
+
+			Thus, one must minimize (based on hint 2):
+			\begin{align*}
+			R(f|x) = \sum_{y \epsilon k}L^{0-1}(y, f(x))P(y|x) \\
+			= \sum_{y!=k} L^{0-1}(f(x), k)P(k|x) + 0 \\
+			= \sum_{y!=k} P(k|x) 				
+			\end{align*}
+			We know that $\sum_{y \epsilon k} P(k|x)=1$ because the x must be classified and if that probability were less than 1 it would imply there was some nonzero chance of it not being put in any of the classes which definitionally cannot occur. Thus since we are only excluding in the summariton when y=k \newline
+			\begin{align}
+			R(f|x) = \sum_{y!=k} P(k|x) = 1 - P(f(x)| x)
+			\end{align}
+			Since we know that by definition we have already maxxed P(f(x)|x) we also must minimized the risk since any other classifier will decrease P(f(x)|x) and cause the risk to increase.
+			  
+		
+		\item
+		
+		\begin{enumerate}
+			
+			\item $R(f) = \sum_{y=1}^{k}\int L(y,f(x))p(x,y)dx$ \newline
+			$L(y,f(x)) =$ the loss function
+			$p(x,y) =$ the joint density function
+			
+			\item Empirical risk is used because people don't know the true joint density function that is required to use the estimated risk function
+			
+			\item $lim_{n->\infty}|R(f)- \hat{R}_{n}{(f)}=0$ \newline This is true because across infinite independent draws will cause the estimation of $\hat{(R)_{n}}$ to get increasingly close to the actual risk ratio (as described by the regression to the mean). Thus $\hat{(R)}_{n}(f)=R(f)$
+			
+			\item $[0,1]$ is the range because at worst it missess all its predictions and equals 1 or it gets all predicitions right and equals zero. R(f) is the probability of a mistaken prediction
+			
+			\item .5 because you would expect a random classifier to preform as well as randomly classifying which would get 50\% of the predicitons correct
+			
+			\item The risk is smaller $E[R(f^{2})]<E[R(f')]$ because it chooses better than at random according to the definition and thus has a lower probability of making an incorrect prediction. Since R(f) is the risk of an incorrect prediction that will be smaller for $f^{2}$
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+\end{document}

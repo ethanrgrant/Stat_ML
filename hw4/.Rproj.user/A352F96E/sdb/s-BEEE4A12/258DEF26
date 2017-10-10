@@ -1,0 +1,18 @@
+{
+    "contents" : "#Ethan Grant uni: erg2145\n#Stats W4400\n\nMultionmialEM <- function(H,K,tau){\n  #install packages\n  #install.packages(\"ppls\")  \n  #library(\"ppls\", lib.loc=\"C:/Program Files/R/R-3.2.2/library\")\n  \n  K=3\n  \n  #sanitize data\n  H <- H+.001\n  \n  #sample k histograms and normalize\n  samples <- H[sample(dim(H)[1], K),]\n  for(i in 1:K){\n    samples[i,] = normalize.vector(samples[i,])\n  }\n  \n  #set up variables\n  phi = matrix(, dim(H)[1], K)\n  a = matrix(, dim(H)[1], K)\n  c <- rep(1/3, 3)\n  \n  #calculate every phi value\n  for(k in 1:K){\n    sumVec <- H %*% log(samples[k,])\n    for(i in 1: dim(H)[1]){\n      phi[i,k] = exp(sumVec[i])\n    }\n  }\n\n  #calculate the a values\n  for(i in 1:dim(H)[1]){\n    for(k in 1:K){\n      sum <- sum(c*phi[i,])\n      a[i,k] <- c[k]*phi[i,k]\n    }\n  }\n  \n  #compute new mixture weights, and centroid\n  for(k in 1:K){\n    c[k] <- rowSums(a[,k])/dim(H)[1]\n    t[k]\n  }\n  \n  \n}\n\ntau = .5\nK= 3\nm <-MultionmialEM(H,K,tau)\n",
+    "created" : 1459959578998.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2314883338",
+    "id" : "258DEF26",
+    "lastKnownWriteTime" : 1459966798,
+    "path" : "C:/Users/Ethan/Desktop/Columbia/Junior Spring/Stat ML/hw4/hw_4.R",
+    "project_path" : "hw_4.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
